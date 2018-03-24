@@ -1,0 +1,66 @@
+﻿
+<html>
+<head>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var canvas = $("#myCanvas");
+			var context = canvas.get(0).getContext("2d");
+			
+			//TODO Make a VAR for each character
+
+            //TODO Make a health bar better than the one provided
+
+            //makes the background
+			var background = new Image();
+			background.src = "Background.png";
+			background.onload = function(){
+				context.drawImage(background,0,0);
+				};
+
+            //TODO make a var *character*Image for each character
+			
+			window.addEventListener("keydown", keydownHandler, false);
+			window.addEventListener("keyup",keyupHandler,false);
+
+            //renders the scene on each key up
+			function keyupHandler() {
+			    context.clearRect(0,0,500,200);
+				context.drawImage(background,0,0);
+				render();
+			}
+
+
+            //TODO make hitdetection for each character
+						
+			
+			function keydownHandler(event) {
+
+                //TODO make a switch case for each control per player
+
+                //switch (event.keyCode) {
+                    
+                //}
+				
+				context.clearRect(0,0,500,200);
+				context.drawImage(background,0,0);
+				render(); 
+			}
+			
+			function render() {
+				
+			//TODO make a switch case for each character to change their sprites to match their current action
+            //TODO change the health bars here
+				
+			}
+			
+		});
+	</script>
+</head>
+<body>
+	
+	<canvas id="myCanvas" height="200" width="500"></canvas>
+
+</body>
+</html>
