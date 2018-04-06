@@ -4,58 +4,139 @@
 	<meta charset="utf-8">
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 	<script type="text/javascript">
-		$(document).ready(function(){
-			var canvas = $("#myCanvas");
-			var context = canvas.get(0).getContext("2d");
-			
-			//TODO Make a VAR for each character
+        $(document).ready(function () {
+            var canvas = $("#myCanvas");
+            var context = canvas.get(0).getContext("2d");
+
+            //Character objects
+            var Lucina =
+                {
+                    image: "lucina.png",
+                    health: 100,
+                    //image positions
+                    idle: 0,
+                    block: 0,
+                    grab: 1,
+                    attack: 2,
+                    hurt: 3,
+                    dead: 4,
+                    jump: 5,
+                    //image height
+                    width: 50,
+                    height: 100,
+                };
+            var Bowser =
+                {
+                    image: "bowser.png",
+                    health: 100,
+                    idle: 0,
+                    block: 0,
+                    grab: 1,
+                    attack: 2,
+                    hurt: 3,
+                    dead: 4,
+                    jump: 5,
+                    posx: 0,
+                    posy: 100,
+                    width: 50,
+                    height: 100,
+                    state: 0
+                };
+            var Sheik =
+                {
+                    image: "sheik.png",
+                    health: 100,
+                    idle: 0,
+                    block: 0,
+                    grab: 1,
+                    attack: 2,
+                    hurt: 3,
+                    dead: 4,
+                    jump: 5,
+                    posx: 0,
+                    posy: 100,
+                    width: 50,
+                    height: 100,
+                    state: 0
+                };
+            var Samus =
+                {
+                    image: "samus.png",
+                    health: 100,
+                    idle: 0,
+                    block: 0,
+                    grab: 1,
+                    attack: 2,
+                    hurt: 3,
+                    dead: 4,
+                    jump: 5,
+                    posx: 0,
+                    posy: 100,
+                    width: 50,
+                    height: 100,
+                    state: 0
+                };
+
+            //player object
+            function Player(_character, _positionX, _positionY, _state)
+            {
+                this.character = _character;
+                this._positionX = _positionX;
+                this.positionY = _positionY;
+                this.state = _state;
+            }
 
             //TODO Make a health bar better than the one provided
 
             //makes the background
-			var background = new Image();
-			background.src = "Background.png";
-			background.onload = function(){
-				context.drawImage(background,0,0);
-				};
+            var background = new Image();
+            background.src = "Background.png";
+            background.onload = function ()
+            {
+                context.drawImage(background, 0, 0);
+            };
 
             //TODO make a var *character*Image for each character
-			
-			window.addEventListener("keydown", keydownHandler, false);
-			window.addEventListener("keyup",keyupHandler,false);
+
+            window.addEventListener("keydown", keydownHandler, false);
+            window.addEventListener("keyup", keyupHandler, false);
 
             //renders the scene on each key up
-			function keyupHandler() {
-			    context.clearRect(0,0,500,200);
-				context.drawImage(background,0,0);
-				render();
-			}
+            function keyupHandler()
+            {
+                context.clearRect(0, 0, 500, 200);
+                context.drawImage(background, 0, 0);
+                render();
+            }
 
 
             //TODO make hitdetection for each character
-						
-			
-			function keydownHandler(event) {
+
+
+            function keydownHandler(event)
+            {
 
                 //TODO make a switch case for each control per player
 
-                //switch (event.keyCode) {
-                    
+                //switch (event.keyCode) 
+                //{
+
                 //}
-				
-				context.clearRect(0,0,500,200);
-				context.drawImage(background,0,0);
-				render(); 
-			}
-			
-			function render() {
-				
-			//TODO make a switch case for each character to change their sprites to match their current action
-            //TODO change the health bars here
-				
-			}
-			
-		});
+
+                context.clearRect(0, 0, 500, 200);
+                context.drawImage(background, 0, 0);
+                render();
+            }
+
+            function render()
+            {
+
+                //TODO make a switch case for each character to change their sprites to match their current action
+                //TODO change the health bars here
+
+            }
+
+        });
 	</script>
 </head>
 <body>
