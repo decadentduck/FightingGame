@@ -1,102 +1,77 @@
-﻿
+﻿<!DOCTYPE html>
 <html>
 <head>
+    <title>Fighting Game</title>
 	<meta charset="utf-8">
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 	<script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function ()
+        {
             var canvas = $("#myCanvas");
             var context = canvas.get(0).getContext("2d");
-
+            
             //Character objects
             var Lucina =
                 {
-                    image: "lucina.png",
-                    health: 100,
-                    //image positions
-                    idle: 0,
-                    block: 0,
-                    grab: 1,
-                    attack: 2,
-                    hurt: 3,
-                    dead: 4,
-                    jump: 5,
+                    image: "Images/lucina.png",
                     //image height
                     width: 50,
-                    height: 100,
+                    height: 60,
                 };
             var Bowser =
                 {
-                    image: "bowser.png",
-                    health: 100,
-                    idle: 0,
-                    block: 0,
-                    grab: 1,
-                    attack: 2,
-                    hurt: 3,
-                    dead: 4,
-                    jump: 5,
-                    posx: 0,
-                    posy: 100,
+                    image: "Images/bowser.png",
                     width: 50,
                     height: 100,
-                    state: 0
                 };
             var Sheik =
                 {
-                    image: "sheik.png",
-                    health: 100,
-                    idle: 0,
-                    block: 0,
-                    grab: 1,
-                    attack: 2,
-                    hurt: 3,
-                    dead: 4,
-                    jump: 5,
-                    posx: 0,
-                    posy: 100,
+                    image: "Images/sheik.png",
                     width: 50,
                     height: 100,
-                    state: 0
                 };
             var Samus =
                 {
-                    image: "samus.png",
-                    health: 100,
-                    idle: 0,
-                    block: 0,
-                    grab: 1,
-                    attack: 2,
-                    hurt: 3,
-                    dead: 4,
-                    jump: 5,
-                    posx: 0,
-                    posy: 100,
+                    image: "Images/samus.png",
                     width: 50,
                     height: 100,
-                    state: 0
                 };
 
+            //character images
+            var lucinaImage = new Image();
+            lucinaImage.src = Lucina.image;
+            var bowserImage = new Image();
+            bowserImage.src = Bowser.image;
+            var sheikImage = new Image();
+            sheikImage.src = Sheik.image;
+            var samusImage = new Image();
+            samusImage.src = Samus.image;
+            
+            //background image
+            var background = new Image();
+            background.src = "Images/Background.png";
+            background.addEventListener("load", render, false);
+            
             //player object
             function Player(_character, _positionX, _positionY, _state)
             {
+                //image positions
+                this.idle = 0;
+                this.block = 0;
+                this.grab = 1;
+                this.attack = 2;
+                this.hurt = 3;
+                this.dead = 4;
+                this.jump = 5;
+                this.health = 100;
                 this.character = _character;
-                this._positionX = _positionX;
+                this.positionX = _positionX;
                 this.positionY = _positionY;
                 this.state = _state;
             }
 
-            //TODO Make a health bar better than the one provided
-
-            //makes the background
-            var background = new Image();
-            background.src = "Background.png";
-            background.onload = function ()
-            {
-                context.drawImage(background, 0, 0);
-            };
-
-            //TODO make a var *character*Image for each character
+            var player1 = Player(Lucina, 100, 100, 0);
+            var computer = Player(Bowser, 100, 100, 0);
 
             window.addEventListener("keydown", keydownHandler, false);
             window.addEventListener("keyup", keyupHandler, false);
@@ -104,35 +79,36 @@
             //renders the scene on each key up
             function keyupHandler()
             {
-                context.clearRect(0, 0, 500, 200);
-                context.drawImage(background, 0, 0);
+                //TODO update computer AI
                 render();
             }
-
-
+            
             //TODO make hitdetection for each character
-
-
+            
             function keydownHandler(event)
             {
-
-                //TODO make a switch case for each control per player
+                //TODO make a switch case for each control for player
 
                 //switch (event.keyCode) 
                 //{
 
                 //}
-
-                context.clearRect(0, 0, 500, 200);
-                context.drawImage(background, 0, 0);
-                render();
             }
 
             function render()
             {
+                //clear the page
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                //draw the background
+                context.drawImage(background, 0, 0);
 
+                //Draw the Player
                 //TODO make a switch case for each character to change their sprites to match their current action
-                //TODO change the health bars here
+                //context.drawImage(lucinaImage, 0 /*(player1.state * Lucina.width)*/, 0, Lucina.width, Lucina.height,
+                //    player1._positionX, player1.positionY, Lucina.width, Lucina.height);
+                context.drawImage(lucinaImage, 0, 0, Lucina.width, Lucina.height, 100, 100, Lucina.width, Lucina.height);
+                //TODO Draw the Enemy
+                //TODO draw the health bars here
 
             }
 
@@ -141,7 +117,7 @@
 </head>
 <body>
 	
-	<canvas id="myCanvas" height="200" width="500"></canvas>
+	<canvas id="myCanvas" height="462" width="580"></canvas>
 
 </body>
 </html>
