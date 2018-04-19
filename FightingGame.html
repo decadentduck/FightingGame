@@ -18,8 +18,8 @@
                 {
                     image: "Images/lucina.png",
                     //image size per frame
-                    width: 50,
-                    height: 60,
+                    width: 80,
+                    height: 65,
                 };
             var Bowser =
                 {
@@ -31,13 +31,13 @@
                 {
                     image: "Images/shiek.png",
                     width: 50,
-                    height: 45,
+                    height: 65,
                 };
             var Samus =
                 {
                     image: "Images/samus.png",
                     width: 50,
-                    height: 45,
+                    height: 65,
                 };
 
             //character images
@@ -49,11 +49,15 @@
             sheikImage.src = Sheik.image;
             var samusImage = new Image();
             samusImage.src = Samus.image;
-            
-            //background image
+
+            //backgroung image
             var background = new Image();
             background.src = "Images/Background.png";
-            background.addEventListener("load", render, false);
+
+            //character select image
+            var selectImage = new Image();
+            selectImage.src = "Images/SelectImage.png";
+            selectImage.addEventListener("load", render, false);
             
             //player object
             var player =
@@ -66,6 +70,7 @@
                     dead: 4,
                     jump: 5,
                     health: 100,
+                    movement: "",
                     character: "character",
                     positionX: 100,
                     positionY: 200,
@@ -93,15 +98,14 @@
             //renders the scene on each key up
             function keyupHandler()
             {
-                //TODO update computer AI
-                render();
+
             }
             
             //TODO make hitdetection for each character
             
             function keydownHandler(event)
             {
-                //TODO character select
+                //character select
                 if (gamePlaying == false)
                 {
                     switch (event.keyCode) 
@@ -142,33 +146,61 @@
                     }
                     
                 }
+
                 //TODO player controls
                 else
                 {
                     switch (event.keyCode)
                     {
                         case 119: //w
+                            player.movement = "jump";
                             break;
                         case 97: //a
+                            player.movement = "left";
                             break;
                         case 115: //s
                             break;
                         case 100: //d
+                            player.movement = "right";
                             break;
                         default:
                             break;
                     }
                 }
-               
             }
+
+            function Update()
+            {
+                //TODO check if somebody won
+                if (player.health <= 0) { }
+                if (enemy.health <= 0) { }
+
+                //TODO update player 
+                switch (player.movement)
+                {
+                    case "jump":
+                        break;
+                    case "left":
+                        break;
+                    case "right":
+                        break;
+                    default:
+                        break;
+                }
+                //TODO Collision detection
+                //TODO update enemy
+
+                render();
+            }
+            setInterval(Update, 250);
 
             function render()
             {
                 //clear the page
                 context.clearRect(0, 0, canvas.width, canvas.height);
                
-
-                if (gamePlaying == true) {
+                if (gamePlaying == true)
+                {
                     //draw the background
                     context.drawImage(background, 0, 0);
 
@@ -197,7 +229,8 @@
                 //else show character selection screen
                 else
                 {
-                    //TODO show character image
+                    //show character image
+                    context.drawImage(selectImage, 0, 0);
                 }
             }
 
@@ -205,8 +238,8 @@
 	</script>
 </head>
 <body>
-	
-	<canvas id="myCanvas" height="462" width="580"></canvas>
 
+    <canvas id="myCanvas" height="462" width="580"></canvas>
+    
 </body>
 </html>
