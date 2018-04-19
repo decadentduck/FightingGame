@@ -185,7 +185,14 @@
                     else if (enemy.character == "Bowser") { context.drawImage(bowserImage, 0, 0, Bowser.width, Bowser.height, enemy.positionX, enemy.positionY, Bowser.width, Bowser.height); }
                     else if (enemy.character == "Sheik") { context.drawImage(sheikImage, 0, 0, Sheik.width, Sheik.height, enemy.positionX, enemy.positionY, Sheik.width, Sheik.height); }
                     else { context.drawImage(samusImage, 0, 0, Samus.width, Samus.height, enemy.positionX, enemy.positionY, Samus.width, Samus.height); }
-                    //TODO draw the health bars here
+                    //draw the health bars
+                    context.fillStyle = "#000000";
+                    context.fillRect(25, 25, 200, 20);
+                    context.fillRect(325, 25, 200, 20);
+                    //fill in the health
+                    context.fillStyle = "#00FF19";
+                    context.fillRect(25, 25, (2 * player.health), 20);
+                    context.fillRect(325, 25, (2 * enemy.health), 20);
                 }
                 //else show character selection screen
                 else
