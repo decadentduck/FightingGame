@@ -24,7 +24,7 @@
             var Bowser =
                 {
                     image: "Images/bowser.png",
-                    width: 72,
+                    width: 80,
                     height: 65,
                 };
             var Sheik =
@@ -70,7 +70,7 @@
                     dead: 4,
                     jump: 5,
                     health: 100,
-                    movement: "",
+                    movement: "idle",
                     character: "character",
                     positionX: 100,
                     positionY: 200,
@@ -98,10 +98,9 @@
             //renders the scene on each key up
             function keyupHandler()
             {
-
+                //TODO stuff here
+                player.movement = "idle";
             }
-            
-            //TODO make hitdetection for each character
             
             function keydownHandler(event)
             {
@@ -152,15 +151,15 @@
                 {
                     switch (event.keyCode)
                     {
-                        case 119: //w
+                        case 87: //w
                             player.movement = "jump";
                             break;
-                        case 97: //a
+                        case 65: //a
                             player.movement = "left";
                             break;
-                        case 115: //s
+                        case 68: //s
                             break;
-                        case 100: //d
+                        case 83: //d
                             player.movement = "right";
                             break;
                         default:
@@ -179,10 +178,15 @@
                 switch (player.movement)
                 {
                     case "jump":
+                        player.state = player.jump;
                         break;
                     case "left":
+                        player.state = player.idle;
+                        player.positionX -= 10;
                         break;
                     case "right":
+                        player.state = player.idle;
+                        player.positionX += 10;
                         break;
                     default:
                         break;
