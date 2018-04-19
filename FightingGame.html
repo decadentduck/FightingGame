@@ -9,32 +9,35 @@
         {
             var canvas = $("#myCanvas");
             var context = canvas.get(0).getContext("2d");
-            
+
+            //game playing bool
+            var gamePlaying = false;
+
             //Character objects
             var Lucina =
                 {
                     image: "Images/lucina.png",
-                    //image height
+                    //image size per frame
                     width: 50,
                     height: 60,
                 };
             var Bowser =
                 {
                     image: "Images/bowser.png",
-                    width: 50,
-                    height: 100,
+                    width: 72,
+                    height: 65,
                 };
             var Sheik =
                 {
-                    image: "Images/sheik.png",
+                    image: "Images/shiek.png",
                     width: 50,
-                    height: 100,
+                    height: 45,
                 };
             var Samus =
                 {
                     image: "Images/samus.png",
                     width: 50,
-                    height: 100,
+                    height: 45,
                 };
 
             //character images
@@ -53,25 +56,36 @@
             background.addEventListener("load", render, false);
             
             //player object
-            function Player(_character, _positionX, _positionY, _state)
-            {
-                //image positions
-                this.idle = 0;
-                this.block = 0;
-                this.grab = 1;
-                this.attack = 2;
-                this.hurt = 3;
-                this.dead = 4;
-                this.jump = 5;
-                this.health = 100;
-                this.character = _character;
-                this.positionX = _positionX;
-                this.positionY = _positionY;
-                this.state = _state;
-            }
-
-            var player1 = Player(Lucina, 100, 100, 0);
-            var computer = Player(Bowser, 100, 100, 0);
+            var player =
+                {
+                    idle: 0,
+                    block: 0,
+                    grab: 1,
+                    attack: 2,
+                    hurt: 3,
+                    dead: 4,
+                    jump: 5,
+                    health: 100,
+                    character: "character",
+                    positionX: 100,
+                    positionY: 200,
+                    state: 0,
+                };
+            var enemy =
+                {
+                    idle: 0,
+                    block: 0,
+                    grab: 1,
+                    attack: 2,
+                    hurt: 3,
+                    dead: 4,
+                    jump: 5,
+                    health: 100,
+                    character: "character",
+                    positionX: 400,
+                    positionY: 200,
+                    state: 0,
+                };
 
             window.addEventListener("keydown", keydownHandler, false);
             window.addEventListener("keyup", keyupHandler, false);
@@ -87,29 +101,97 @@
             
             function keydownHandler(event)
             {
-                //TODO make a switch case for each control for player
+                //TODO character select
+                if (gamePlaying == false)
+                {
+                    switch (event.keyCode) 
+                    {
+                        case 49: // 1
+                            player.character = "Lucina";
+                            break;
+                        case 50: // 2
+                            player.character = "Bowser";
+                            break;
+                        case 51: // 3
+                            player.character = "Sheik";
+                            break;
+                        case 52: // 4
+                            player.character = "Samus";
+                            break;
+                        default:
+                            player.character = "";
+                            break;
+                    }
+                    if (player.character != "")
+                    {
+                        //set player values
+                        player.positionX = 100;
+                        player.positionY = 250;
+                        player.health = 100;
+                        player.state = player.idle;
+                        //set enemy values
+                        //TODO math random number to change enemy character
+                        enemy.character = "Bowser";
+                        enemy.positionX = 400;
+                        enemy.positionY = 250;
+                        enemy.health = 100;
+                        enemy.state = enemy.idle;
 
-                //switch (event.keyCode) 
-                //{
-
-                //}
+                        //start game
+                        gamePlaying = true;
+                    }
+                    
+                }
+                //TODO player controls
+                else
+                {
+                    switch (event.keyCode)
+                    {
+                        case 119: //w
+                            break;
+                        case 97: //a
+                            break;
+                        case 115: //s
+                            break;
+                        case 100: //d
+                            break;
+                        default:
+                            break;
+                    }
+                }
+               
             }
 
             function render()
             {
                 //clear the page
                 context.clearRect(0, 0, canvas.width, canvas.height);
-                //draw the background
-                context.drawImage(background, 0, 0);
+               
 
-                //Draw the Player
-                //TODO make a switch case for each character to change their sprites to match their current action
-                //context.drawImage(lucinaImage, 0 /*(player1.state * Lucina.width)*/, 0, Lucina.width, Lucina.height,
-                //    player1._positionX, player1.positionY, Lucina.width, Lucina.height);
-                context.drawImage(lucinaImage, 0, 0, Lucina.width, Lucina.height, 100, 100, Lucina.width, Lucina.height);
-                //TODO Draw the Enemy
-                //TODO draw the health bars here
+                if (gamePlaying == true) {
+                    //draw the background
+                    context.drawImage(background, 0, 0);
 
+                    //Draw the Player
+                    //TODO make a switch case for each character to change their sprites to match their current action
+                    //context.drawImage(lucinaImage, 0 /*(player1.state * Lucina.width)*/, 0, Lucina.width, Lucina.height,
+                    //    player1._positionX, player1.positionY, Lucina.width, Lucina.height);
+                    if (player.character == "Lucina") { context.drawImage(lucinaImage, (player.state * Lucina.width), 0, Lucina.width, Lucina.height, player.positionX, player.positionY, Lucina.width, Lucina.height); }
+                    else if (player.character == "Bowser") { context.drawImage(bowserImage, (player.state * Bowser.width), 0, Bowser.width, Bowser.height, player.positionX, player.positionY, Bowser.width, Bowser.height); }
+                    else if (player.character == "Sheik") { context.drawImage(sheikImage, (player.state * Sheik.width), 0, Sheik.width, Sheik.height, player.positionX, player.positionY, Sheik.width, Sheik.height); }
+                    else { context.drawImage(samusImage, (player.state * Samus.width), 0, Samus.width, Samus.height, player.positionX, player.positionY, Samus.width, Samus.height); }
+                    //Draw the Enemy
+                    if (enemy.character == "Lucina") { context.drawImage(lucinaImage, 0, 0, Lucina.width, Lucina.height, enemy.positionX, enemy.positionY, Lucina.width, Lucina.height); }
+                    else if (enemy.character == "Bowser") { context.drawImage(bowserImage, 0, 0, Bowser.width, Bowser.height, enemy.positionX, enemy.positionY, Bowser.width, Bowser.height); }
+                    else if (enemy.character == "Sheik") { context.drawImage(sheikImage, 0, 0, Sheik.width, Sheik.height, enemy.positionX, enemy.positionY, Sheik.width, Sheik.height); }
+                    else { context.drawImage(samusImage, 0, 0, Samus.width, Samus.height, enemy.positionX, enemy.positionY, Samus.width, Samus.height); }
+                    //TODO draw the health bars here
+                }
+                //else show character selection screen
+                else
+                {
+                    //TODO show character image
+                }
             }
 
         });
