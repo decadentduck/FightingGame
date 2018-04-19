@@ -30,13 +30,13 @@
             var Sheik =
                 {
                     image: "Images/shiek.png",
-                    width: 50,
+                    width: 60,
                     height: 65,
                 };
             var Samus =
                 {
                     image: "Images/samus.png",
-                    width: 50,
+                    width: 95,
                     height: 65,
                 };
 
@@ -63,12 +63,12 @@
             var player =
                 {
                     idle: 0,
-                    block: 0,
-                    grab: 1,
-                    attack: 2,
-                    hurt: 3,
-                    dead: 4,
-                    jump: 5,
+                    block: 1,
+                    grab: 2,
+                    attack: 3,
+                    lose: 4,
+                    win: 5,
+                    jump: 6,
                     health: 100,
                     movement: "idle",
                     character: "character",
@@ -79,12 +79,12 @@
             var enemy =
                 {
                     idle: 0,
-                    block: 0,
-                    grab: 1,
-                    attack: 2,
-                    hurt: 3,
-                    dead: 4,
-                    jump: 5,
+                    block: 1,
+                    grab: 2,
+                    attack: 3,
+                    lose: 4,
+                    win: 5,
+                    jump: 6,
                     health: 100,
                     character: "character",
                     positionX: 400,
@@ -146,7 +146,7 @@
                     
                 }
 
-                //TODO player controls
+                //player controls
                 else
                 {
                     switch (event.keyCode)
@@ -157,10 +157,17 @@
                         case 65: //a
                             player.movement = "left";
                             break;
-                        case 68: //s
+                        case 83: //s
+                            player.movement = "block";
                             break;
-                        case 83: //d
+                        case 68: //d
                             player.movement = "right";
+                            break;
+                        case 69: //E 
+                            player.movement = "attack";
+                            break;
+                        case 81: //Q 
+                            player.movement = "grab";
                             break;
                         default:
                             break;
@@ -170,11 +177,19 @@
 
             function Update()
             {
-                //TODO check if somebody won
-                if (player.health <= 0) { }
-                if (enemy.health <= 0) { }
+                //check if somebody won
+                if (player.health <= 0)
+                {
+                    player.state = player.lose;
+                    enemy.state = enemy.win;
+                }
+                if (enemy.health <= 0)
+                {
+                    player.state = player.win;
+                    enemy.state = enemy.lose;
+                }
 
-                //TODO update player 
+                //update player 
                 switch (player.movement)
                 {
                     case "jump":
@@ -188,7 +203,17 @@
                         player.state = player.idle;
                         player.positionX += 10;
                         break;
+                    case "attack":
+                        player.state = player.attack;
+                        break;
+                    case "block":
+                        player.state = player.block;
+                        break;
+                    case "grab":
+                        player.state = player.grab;
+                        break;
                     default:
+                        player.state = player.idle;
                         break;
                 }
                 //TODO Collision detection
