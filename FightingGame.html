@@ -198,7 +198,7 @@
                                     player.state = player.jump;
                                     player.jumpTimer++;
                                 }
-                                else { player.movement = "idle"; player.state = player.idle; }
+                                else { player.movement = "idle"; player.state = player.idle }
                                 break;
                             case "left":
                                 if (player.positionX > 50)
@@ -232,7 +232,7 @@
                         else if (player.positionY < 220) { player.positionY += 10; }
                         else { player.jumpTimer = 0; }
 
-                        if (player.positionY > 200) { player.positionY = 220; }
+                        if (player.positionY > 220) { player.positionY = 220; }
                     }
 
                     //Collision detection
