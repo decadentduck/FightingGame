@@ -227,6 +227,7 @@
                                 player.state = player.idle;
                                 break;
                         }
+
                         // implement jump
                         if (player.state == player.jump) { player.positionY -= 10; }
                         else if (player.positionY < 220) { player.positionY += 10; }
@@ -293,7 +294,7 @@
                     switch (enemy.movement)
                     {
                         case "jump":
-                            if (enemy.jumpTimer < 20)
+                            if (enemy.jumpTimer < 10)
                             {
                                 enemy.state = enemy.jump;
                                 enemy.jumpTimer++;
@@ -327,7 +328,13 @@
                             enemy.state = enemy.idle;
                             break;
                     }
-                    //TODO enemy gravity
+
+                    // implement enemy jump
+                    if (enemy.state == enemy.jump) { enemy.positionY -= 10; }
+                    else if (enemy.positionY < 220) { enemy.positionY += 10; }
+                    else { enemy.jumpTimer = 0; }
+
+                    if (player.positionY > 220) { player.positionY = 220; }
 
                     //check if somebody won
                     if (player.health <= 0)
