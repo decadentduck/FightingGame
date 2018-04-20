@@ -96,14 +96,11 @@
             window.addEventListener("keydown", keydownHandler, false);
             window.addEventListener("keyup", keyupHandler, false);
 
-            //renders the scene on each key up
             function keyupHandler()
             {
                 //TODO stuff here
                 player.movement = "idle";
             }
-
-            function getRandomInt(max) {return Math.floor(Math.random() * Math.floor(max));}
 
             function keydownHandler(event)
             {
@@ -132,7 +129,7 @@
                     {
                         //set player values
                         player.positionX = 100;
-                        player.positionY = 230;
+                        player.positionY = 220;
                         player.health = 100;
                         player.state = player.idle;
 
@@ -146,9 +143,8 @@
                         else if (enemyChar == 2) { enemy.character = "Sheik"; }
                         else { enemy.character == "Samus"; }
 
-                        //enemy.character = "Samus";
                         enemy.positionX = 400;
-                        enemy.positionY = 230;
+                        enemy.positionY = 220;
                         enemy.health = 100;
                         enemy.state = enemy.idle;
 
@@ -188,7 +184,7 @@
 
                 if (enemy.movementTimer <= 0 && enemy.health >= 10) {
 
-                    if (enemy.positionX - player.positionX <= 50) {
+                    if (enemy.positionX - player.positionX <= 50 && enemy.positionX - player.positionX >= -50) {
 
                         var enemyAct = Math.floor(Math.random() * 6);
 
@@ -210,9 +206,13 @@
                         }
                         enemy.movementTimer = 15;
                     }
+                    else if (enemy.positionX - player.positionX <= -50) {
+                        enemy.movement = "right";
+                        enemy.movementTimer = 5;
+                    }
                     else {
                         enemy.movement = "left";
-                        enemy.movementTimer = 10;
+                        enemy.movementTimer = 5;
                     }
 
                     
@@ -317,20 +317,17 @@
                     //draw the background
                     context.drawImage(background, 0, 0);
 
-                    //Draw the Player
-                    //TODO make a switch case for each character to change their sprites to match their current action
-                    //context.drawImage(lucinaImage, 0 /*(player1.state * Lucina.width)*/, 0, Lucina.width, Lucina.height,
-                    //    player1._positionX, player1.positionY, Lucina.width, Lucina.height);
-                    if (player.character == "Lucina") { context.drawImage(lucinaImage, (player.state * Lucina.width), 0, Lucina.width, Lucina.height, player.positionX, player.positionY, Lucina.width, Lucina.height); }
-                    else if (player.character == "Bowser") { context.drawImage(bowserImage, (player.state * Bowser.width), 0, Bowser.width, Bowser.height, player.positionX, player.positionY, Bowser.width, Bowser.height); }
-                    else if (player.character == "Sheik") { context.drawImage(sheikImage, (player.state * Sheik.width), 0, Sheik.width, Sheik.height, player.positionX, player.positionY, Sheik.width, Sheik.height); }
-                    else { context.drawImage(samusImage, (player.state * Samus.width), 0, Samus.width, Samus.height, player.positionX, player.positionY, Samus.width, Samus.height); }
-
                     //Draw the Enemy
                     if (enemy.character == "Lucina") { context.drawImage(lucinaImage, (enemy.state * Lucina.width), 0, Lucina.width, Lucina.height, enemy.positionX, enemy.positionY, Lucina.width, Lucina.height); }
                     else if (enemy.character == "Bowser") { context.drawImage(bowserImage, (enemy.state * Bowser.width), 0, Bowser.width, Bowser.height, enemy.positionX, enemy.positionY, Bowser.width, Bowser.height); }
                     else if (enemy.character == "Sheik") { context.drawImage(sheikImage, (enemy.state * Sheik.width), 0, Sheik.width, Sheik.height, enemy.positionX, enemy.positionY, Sheik.width, Sheik.height); }
                     else { context.drawImage(samusImage, (enemy.state * Samus.width), 0, Samus.width, Samus.height, enemy.positionX, enemy.positionY, Samus.width, Samus.height); }
+
+                    //Draw the Player
+                    if (player.character == "Lucina") { context.drawImage(lucinaImage, (player.state * Lucina.width), 0, Lucina.width, Lucina.height, player.positionX, player.positionY, Lucina.width, Lucina.height); }
+                    else if (player.character == "Bowser") { context.drawImage(bowserImage, (player.state * Bowser.width), 0, Bowser.width, Bowser.height, player.positionX, player.positionY, Bowser.width, Bowser.height); }
+                    else if (player.character == "Sheik") { context.drawImage(sheikImage, (player.state * Sheik.width), 0, Sheik.width, Sheik.height, player.positionX, player.positionY, Sheik.width, Sheik.height); }
+                    else { context.drawImage(samusImage, (player.state * Samus.width), 0, Samus.width, Samus.height, player.positionX, player.positionY, Samus.width, Samus.height); }
 
                     //draw the health bars
                     context.fillStyle = "#000000";
@@ -354,8 +351,21 @@
 	</script>
 </head>
 <body>
+    
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+
+    <p style="font:300% arial; position: absolute; left: 400px; top: -30px;">Lemme Smash</p>
 
     <canvas id="myCanvas" height="462" width="580"></canvas>
+
+    <p style="font:200% arial; position: absolute; left: 800px; top: 50px;">
+        How To Play
+    </p>
     
+    <p style="position: absolute; left: 600px; top: 100px;">
+        How To Play
+    </p>
+
 </body>
 </html>
