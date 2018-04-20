@@ -50,7 +50,7 @@
             var samusImage = new Image();
             samusImage.src = Samus.image;
 
-            //backgroung image
+            //background image
             var background = new Image();
             background.src = "Images/Background.png";
 
@@ -90,6 +90,7 @@
                     positionX: 400,
                     positionY: 200,
                     state: 0,
+                    movementTimer: 0,
                 };
 
             window.addEventListener("keydown", keydownHandler, false);
@@ -101,7 +102,9 @@
                 //TODO stuff here
                 player.movement = "idle";
             }
-            
+
+            function getRandomInt(max) {return Math.floor(Math.random() * Math.floor(max));}
+
             function keydownHandler(event)
             {
                 //character select
@@ -129,14 +132,23 @@
                     {
                         //set player values
                         player.positionX = 100;
-                        player.positionY = 250;
+                        player.positionY = 230;
                         player.health = 100;
                         player.state = player.idle;
+
+
                         //set enemy values
                         //TODO math random number to change enemy character
-                        enemy.character = "Bowser";
+                        var enemyChar = Math.floor(Math.random() * 4);
+
+                        if (enemyChar == 0) { enemy.character = "Lucina"; }
+                        else if (enemyChar == 1) { enemy.character = "Bowser"; }
+                        else if (enemyChar == 2) { enemy.character = "Sheik"; }
+                        else { enemy.character == "Samus"; }
+
+                        //enemy.character = "Samus";
                         enemy.positionX = 400;
-                        enemy.positionY = 250;
+                        enemy.positionY = 230;
                         enemy.health = 100;
                         enemy.state = enemy.idle;
 
@@ -151,16 +163,16 @@
                 {
                     switch (event.keyCode)
                     {
-                        case 87: //w
+                        case 87: //W
                             player.movement = "jump";
                             break;
-                        case 65: //a
+                        case 65: //A
                             player.movement = "left";
                             break;
-                        case 83: //s
+                        case 83: //S
                             player.movement = "block";
                             break;
-                        case 68: //d
+                        case 68: //D
                             player.movement = "right";
                             break;
                         case 69: //E 
@@ -173,51 +185,123 @@
                             break;
                     }
                 }
+
+                if (enemy.movementTimer <= 0 && enemy.health >= 10) {
+
+                    if (enemy.positionX - player.positionX <= 50) {
+
+                        var enemyAct = Math.floor(Math.random() * 6);
+
+                        switch (enemyAct) {
+                            case 1:
+                                enemy.movement = "jump";
+                                break;
+                            case 2:
+                                enemy.movement = "block";
+                                break;
+                            case 3:
+                                enemy.movement = "attack";
+                                break;
+                            case 4:
+                                enemy.movement = "grab";
+                                break;
+                            default:
+                                break;
+                        }
+                        enemy.movementTimer = 15;
+                    }
+                    else {
+                        enemy.movement = "left";
+                        enemy.movementTimer = 10;
+                    }
+
+                    
+                }
+                enemy.movementTimer -= 1;
             }
 
             function Update()
             {
-                //check if somebody won
-                if (player.health <= 0)
+                //update player 
+                if (player.health >= 10 && enemy.health >= 10) {
+                    switch (player.movement) {
+                        case "jump":
+                            player.state = player.jump;
+                            break;
+                        case "left":
+                            player.state = player.idle;
+                            player.positionX -= 10;
+                            break;
+                        case "right":
+                            player.state = player.idle;
+                            player.positionX += 10;
+                            break;
+                        case "attack":
+                            player.state = player.attack;
+                            break;
+                        case "block":
+                            player.state = player.block;
+                            break;
+                        case "grab":
+                            player.state = player.grab;
+                            break;
+                        default:
+                            player.state = player.idle;
+                            break;
+                    }
+                }
+                
+
+                //TODO Collision detection
+                if (enemy.positionX - player.positionX <= 50)
                 {
+                    //player actions
+                    if (player.state == player.attack && enemy.state != enemy.block) { enemy.health -= 10; }
+                    if (player.state == player.grab && enemy.state != enemy.attack) { enemy.health -= 10; }
+
+
+                    //enemy actions
+                    if (enemy.state == enemy.attack && player.state != player.block) { player.health -= 10; }
+                    if (enemy.state == enemy.grab && player.state != player.attack) { player.health -= 10; }
+                }
+
+
+                //update enemy
+                switch (enemy.movement) {
+                    case "jump":
+                        enemy.state = enemy.jump;
+                        break;
+                    case "left":
+                        enemy.state = enemy.idle;
+                        enemy.positionX -= 10;
+                        break;
+                    case "right":
+                        enemy.state = enemy.idle;
+                        enemy.positionX += 10;
+                        break;
+                    case "attack":
+                        enemy.state = enemy.attack;
+                        break;
+                    case "block":
+                        enemy.state = enemy.block;
+                        break;
+                    case "grab":
+                        enemy.state = enemy.grab;
+                        break;
+                    default:
+                        enemy.state = enemy.idle;
+                        break;
+                }
+
+                //check if somebody won
+                if (player.health <= 0) {
                     player.state = player.lose;
                     enemy.state = enemy.win;
                 }
-                if (enemy.health <= 0)
-                {
+                if (enemy.health <= 0) {
                     player.state = player.win;
                     enemy.state = enemy.lose;
                 }
-
-                //update player 
-                switch (player.movement)
-                {
-                    case "jump":
-                        player.state = player.jump;
-                        break;
-                    case "left":
-                        player.state = player.idle;
-                        player.positionX -= 10;
-                        break;
-                    case "right":
-                        player.state = player.idle;
-                        player.positionX += 10;
-                        break;
-                    case "attack":
-                        player.state = player.attack;
-                        break;
-                    case "block":
-                        player.state = player.block;
-                        break;
-                    case "grab":
-                        player.state = player.grab;
-                        break;
-                    default:
-                        player.state = player.idle;
-                        break;
-                }
-                //TODO Collision detection
-                //TODO update enemy
 
                 render();
             }
@@ -241,19 +325,22 @@
                     else if (player.character == "Bowser") { context.drawImage(bowserImage, (player.state * Bowser.width), 0, Bowser.width, Bowser.height, player.positionX, player.positionY, Bowser.width, Bowser.height); }
                     else if (player.character == "Sheik") { context.drawImage(sheikImage, (player.state * Sheik.width), 0, Sheik.width, Sheik.height, player.positionX, player.positionY, Sheik.width, Sheik.height); }
                     else { context.drawImage(samusImage, (player.state * Samus.width), 0, Samus.width, Samus.height, player.positionX, player.positionY, Samus.width, Samus.height); }
+
                     //Draw the Enemy
-                    if (enemy.character == "Lucina") { context.drawImage(lucinaImage, 0, 0, Lucina.width, Lucina.height, enemy.positionX, enemy.positionY, Lucina.width, Lucina.height); }
-                    else if (enemy.character == "Bowser") { context.drawImage(bowserImage, 0, 0, Bowser.width, Bowser.height, enemy.positionX, enemy.positionY, Bowser.width, Bowser.height); }
-                    else if (enemy.character == "Sheik") { context.drawImage(sheikImage, 0, 0, Sheik.width, Sheik.height, enemy.positionX, enemy.positionY, Sheik.width, Sheik.height); }
-                    else { context.drawImage(samusImage, 0, 0, Samus.width, Samus.height, enemy.positionX, enemy.positionY, Samus.width, Samus.height); }
+                    if (enemy.character == "Lucina") { context.drawImage(lucinaImage, (enemy.state * Lucina.width), 0, Lucina.width, Lucina.height, enemy.positionX, enemy.positionY, Lucina.width, Lucina.height); }
+                    else if (enemy.character == "Bowser") { context.drawImage(bowserImage, (enemy.state * Bowser.width), 0, Bowser.width, Bowser.height, enemy.positionX, enemy.positionY, Bowser.width, Bowser.height); }
+                    else if (enemy.character == "Sheik") { context.drawImage(sheikImage, (enemy.state * Sheik.width), 0, Sheik.width, Sheik.height, enemy.positionX, enemy.positionY, Sheik.width, Sheik.height); }
+                    else { context.drawImage(samusImage, (enemy.state * Samus.width), 0, Samus.width, Samus.height, enemy.positionX, enemy.positionY, Samus.width, Samus.height); }
+
                     //draw the health bars
                     context.fillStyle = "#000000";
                     context.fillRect(25, 25, 200, 20);
                     context.fillRect(325, 25, 200, 20);
+
                     //fill in the health
                     context.fillStyle = "#00FF19";
-                    context.fillRect(25, 25, (2 * player.health), 20);
-                    context.fillRect(325, 25, (2 * enemy.health), 20);
+                    if (player.health >= 0) {context.fillRect(25, 25, (2 * player.health), 20);}
+                    if (enemy.health >= 0)  {context.fillRect(325, 25, (2 * enemy.health), 20);}
                 }
                 //else show character selection screen
                 else
