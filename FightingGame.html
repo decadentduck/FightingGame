@@ -182,7 +182,7 @@
                     }
                 }
 
-                if (enemy.movementTimer <= 0 && enemy.health >= 10) {
+                if (enemy.movementTimer <= 0 && enemy.health >= 5) {
 
                     if (enemy.positionX - player.positionX <= 50 && enemy.positionX - player.positionX >= -50) {
 
@@ -223,7 +223,7 @@
             function Update()
             {
                 //update player 
-                if (player.health >= 10 && enemy.health >= 10) {
+                if (player.health >= 5 && enemy.health >= 5) {
                     switch (player.movement) {
                         case "jump":
                             player.state = player.jump;
@@ -256,13 +256,13 @@
                 if (enemy.positionX - player.positionX <= 50)
                 {
                     //player actions
-                    if (player.state == player.attack && enemy.state != enemy.block) { enemy.health -= 10; }
-                    if (player.state == player.grab && enemy.state != enemy.attack) { enemy.health -= 10; }
+                    if (player.state == player.attack && enemy.state != enemy.block) { enemy.health -= 5; }
+                    if (player.state == player.grab && enemy.state != enemy.attack) { enemy.health -= 5; }
 
 
                     //enemy actions
-                    if (enemy.state == enemy.attack && player.state != player.block) { player.health -= 10; }
-                    if (enemy.state == enemy.grab && player.state != player.attack) { player.health -= 10; }
+                    if (enemy.state == enemy.attack && player.state != player.block) { player.health -= 5; }
+                    if (enemy.state == enemy.grab && player.state != player.attack) { player.health -= 5; }
                 }
 
 
@@ -363,8 +363,41 @@
         How To Play
     </p>
     
-    <p style="position: absolute; left: 600px; top: 100px;">
-        How To Play
+    <p style="position: absolute; left: 600px; top: 110px;">
+        Use the number keys 1-4 to select your character to face off against a random AI opponent. 
+    </p>
+
+    <p style="position: absolute; left: 600px; top: 130px;">
+        This game functions off of the WASD keys, in order to control your character. 
+    </p>
+
+    <p style="position: absolute; left: 650px; top: 150px;">A - - - Move left </p>
+
+    <p style="position: absolute; left: 650px; top: 170px;">D - - - Move right </p>
+
+    <p style="position: absolute; left: 650px; top: 190px;">W  - - Jump </p>
+
+    <p style="position: absolute; left: 650px; top: 210px;">S - - - Block </p>
+
+    <p style="position: absolute; left: 650px; top: 230px;">Q - - - Grab </p>
+
+    <p style="position: absolute; left: 650px; top: 250px;">E - - - Attack </p>
+
+    <p style="position: absolute; left: 600px; top: 300px;">
+        Attacking and grabbing your opponent will damage them, and the first one to have 
+    </p>
+    <p style="position: absolute; left: 600px; top: 320px;">
+        their health bar emptied loses. 
+    </p>
+
+    <p style="position: absolute; left: 650px; top: 350px;">Blocking protects from attacking but not from grabs </p>
+
+    <p style="position: absolute; left: 650px; top: 370px;">Grabbing damages if they're blocking or idle, but not if they're attacking</p>
+
+    <p style="position: absolute; left: 650px; top: 390px;">Attacking damages if they're idle or grabbing, but not if they're blocking</p>
+    
+    <p style="position: absolute; left: 600px; top: 420px;">
+        It is important to switch up your strategy frequently, as the AI will as well. 
     </p>
 
 </body>
