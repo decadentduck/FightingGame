@@ -236,8 +236,16 @@
                         if (player.positionY > 220) { player.positionY = 220; }
                     }
 
+                    var distX = enemy.positionX - player.positionX;
+                    var distXmag = distX;
+                    if (distX < 0) { distXmag *= -1; }
+
+                    var distY = enemy.positionY - player.positionY;
+                    var distYmag = distY;
+                    if (distY < 0) { distYmag *= -1; }
+
                     //Collision detection
-                    if (enemy.positionX - player.positionX <= 50)
+                    if (distXmag <= 50 && distYmag <= 25)
                     {
                         //player actions
                         if (player.state == player.attack && enemy.state != enemy.block) { enemy.health -= 5; }
@@ -251,8 +259,7 @@
                     //decide enemy movement
                     if (enemy.movementTimer <= 0 && enemy.health >= 5)
                     {
-
-                        if (enemy.positionX - player.positionX <= 50 && enemy.positionX - player.positionX >= -50)
+                        if (distX <= 50 && distX >= -50)
                         {
 
                             var enemyAct = Math.floor(Math.random() * 6);
@@ -276,15 +283,15 @@
                             }
                             enemy.movementTimer = 15;
                         }
-                        else if (enemy.positionX - player.positionX <= -50)
+                        else if (distX <= -50)
                         {
                             enemy.movement = "right";
-                            enemy.movementTimer = 5;
+                            enemy.movementTimer = 1;
                         }
                         else
                         {
                             enemy.movement = "left";
-                            enemy.movementTimer = 5;
+                            enemy.movementTimer = 1;
                         }
 
                     }
@@ -299,7 +306,7 @@
                                 enemy.state = enemy.jump;
                                 enemy.jumpTimer++;
                             }
-                            else { player.movement = "idle"; }
+                            else { enemy.movement = "idle"; enemy.state = enemy.idle; }
                             break;
                         case "left":
                             if (enemy.positionX > 50)
@@ -410,7 +417,7 @@
     <p>&nbsp;</p>
     <p>&nbsp;</p>
 
-    <p style="font:300% arial; position: absolute; left: 400px; top: -30px;">Lemme Smash</p>
+    <p style="font:300% arial; position: absolute; left: 400px; top: -30px;">Smash Bruh</p>
 
     <canvas id="myCanvas" height="462" width="580"></canvas>
 
