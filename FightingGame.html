@@ -75,6 +75,7 @@
                     positionX: 100,
                     positionY: 200,
                     state: 0,
+                    jumpTimer: 0,
                 };
             var enemy =
                 {
@@ -91,6 +92,7 @@
                     positionY: 200,
                     state: 0,
                     movementTimer: 0,
+                    jumpTimer: 0,
                 };
 
             window.addEventListener("keydown", keydownHandler, false);
@@ -98,7 +100,6 @@
 
             function keyupHandler()
             {
-                //TODO stuff here
                 player.movement = "idle";
             }
 
@@ -132,10 +133,9 @@
                         player.positionY = 220;
                         player.health = 100;
                         player.state = player.idle;
-
-
+                        
                         //set enemy values
-                        //TODO math random number to change enemy character
+                        //math random number to change enemy character
                         var enemyChar = Math.floor(Math.random() * 4);
 
                         if (enemyChar == 0) { enemy.character = "Lucina"; }
@@ -151,7 +151,6 @@
                         //start game
                         gamePlaying = true;
                     }
-                    
                 }
 
                 //player controls
@@ -181,131 +180,180 @@
                             break;
                     }
                 }
-
-                if (enemy.movementTimer <= 0 && enemy.health >= 5) {
-
-                    if (enemy.positionX - player.positionX <= 50 && enemy.positionX - player.positionX >= -50) {
-
-                        var enemyAct = Math.floor(Math.random() * 6);
-
-                        switch (enemyAct) {
-                            case 1:
-                                enemy.movement = "jump";
-                                break;
-                            case 2:
-                                enemy.movement = "block";
-                                break;
-                            case 3:
-                                enemy.movement = "attack";
-                                break;
-                            case 4:
-                                enemy.movement = "grab";
-                                break;
-                            default:
-                                break;
-                        }
-                        enemy.movementTimer = 15;
-                    }
-                    else if (enemy.positionX - player.positionX <= -50) {
-                        enemy.movement = "right";
-                        enemy.movementTimer = 5;
-                    }
-                    else {
-                        enemy.movement = "left";
-                        enemy.movementTimer = 5;
-                    }
-
-                    
-                }
-                enemy.movementTimer -= 1;
+                
             }
 
             function Update()
             {
-                //update player 
-                if (player.health >= 5 && enemy.health >= 5) {
-                    switch (player.movement) {
+                if (gamePlaying == true)
+                {
+                    //update player 
+                    if (player.health >= 5 && enemy.health >= 5)
+                    {
+                        switch (player.movement)
+                        {
+                            case "jump":
+                                if (player.jumpTimer < 10)
+                                {
+                                    player.state = player.jump;
+                                    player.jumpTimer++;
+                                }
+                                else { player.movement = "idle"; player.state = player.idle; }
+                                break;
+                            case "left":
+                                if (player.positionX > 50)
+                                {
+                                    player.state = player.idle;
+                                    player.positionX -= 10;
+                                }
+                                break;
+                            case "right":
+                                if (player.positionX < 450)
+                                {
+                                    player.state = player.idle;
+                                    player.positionX += 10;
+                                }
+                                break;
+                            case "attack":
+                                player.state = player.attack;
+                                break;
+                            case "block":
+                                player.state = player.block;
+                                break;
+                            case "grab":
+                                player.state = player.grab;
+                                break;
+                            default:
+                                player.state = player.idle;
+                                break;
+                        }
+                        // implement jump
+                        if (player.state == player.jump) { player.positionY -= 10; }
+                        else if (player.positionY < 220) { player.positionY += 10; }
+                        else { player.jumpTimer = 0; }
+
+                        if (player.positionY > 200) { player.positionY = 220; }
+                    }
+
+                    //Collision detection
+                    if (enemy.positionX - player.positionX <= 50)
+                    {
+                        //player actions
+                        if (player.state == player.attack && enemy.state != enemy.block) { enemy.health -= 5; }
+                        if (player.state == player.grab && enemy.state != enemy.attack) { enemy.health -= 5; }
+
+                        //enemy actions
+                        if (enemy.state == enemy.attack && player.state != player.block) { player.health -= 5; }
+                        if (enemy.state == enemy.grab && player.state != player.attack) { player.health -= 5; }
+                    }
+
+                    //decide enemy movement
+                    if (enemy.movementTimer <= 0 && enemy.health >= 5)
+                    {
+
+                        if (enemy.positionX - player.positionX <= 50 && enemy.positionX - player.positionX >= -50)
+                        {
+
+                            var enemyAct = Math.floor(Math.random() * 6);
+
+                            switch (enemyAct)
+                            {
+                                case 1:
+                                    enemy.movement = "jump";
+                                    break;
+                                case 2:
+                                    enemy.movement = "block";
+                                    break;
+                                case 3:
+                                    enemy.movement = "attack";
+                                    break;
+                                case 4:
+                                    enemy.movement = "grab";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            enemy.movementTimer = 15;
+                        }
+                        else if (enemy.positionX - player.positionX <= -50)
+                        {
+                            enemy.movement = "right";
+                            enemy.movementTimer = 5;
+                        }
+                        else
+                        {
+                            enemy.movement = "left";
+                            enemy.movementTimer = 5;
+                        }
+
+                    }
+                    enemy.movementTimer -= 1;
+
+                    //update enemy
+                    switch (enemy.movement)
+                    {
                         case "jump":
-                            player.state = player.jump;
+                            if (enemy.jumpTimer < 20)
+                            {
+                                enemy.state = enemy.jump;
+                                enemy.jumpTimer++;
+                            }
+                            else { player.movement = "idle"; }
                             break;
                         case "left":
-                            player.state = player.idle;
-                            player.positionX -= 10;
+                            if (enemy.positionX > 50)
+                            {
+                                enemy.state = enemy.idle;
+                                enemy.positionX -= 10;
+                            }
                             break;
                         case "right":
-                            player.state = player.idle;
-                            player.positionX += 10;
+                            if (enemy.positionX < 450)
+                            {
+                                enemy.state = enemy.idle;
+                                enemy.positionX += 10;
+                            }
                             break;
                         case "attack":
-                            player.state = player.attack;
+                            enemy.state = enemy.attack;
                             break;
                         case "block":
-                            player.state = player.block;
+                            enemy.state = enemy.block;
                             break;
                         case "grab":
-                            player.state = player.grab;
+                            enemy.state = enemy.grab;
                             break;
                         default:
-                            player.state = player.idle;
+                            enemy.state = enemy.idle;
                             break;
                     }
+                    //TODO enemy gravity
+
+                    //check if somebody won
+                    if (player.health <= 0)
+                    {
+                        player.state = player.lose;
+                        enemy.state = enemy.win;
+                        render();
+                        alert("Game Over, Player Lost!");
+                        gamePlaying = false;
+                        location.reload();
+                    }
+                    if (enemy.health <= 0)
+                    {
+                        player.state = player.win;
+                        enemy.state = enemy.lose;
+                        render();
+                        alert("Game Over, Player Won!");
+                        gamePlaying = false;
+                        location.reload();
+                    }
+
                 }
                 
-
-                //TODO Collision detection
-                if (enemy.positionX - player.positionX <= 50)
-                {
-                    //player actions
-                    if (player.state == player.attack && enemy.state != enemy.block) { enemy.health -= 5; }
-                    if (player.state == player.grab && enemy.state != enemy.attack) { enemy.health -= 5; }
-
-
-                    //enemy actions
-                    if (enemy.state == enemy.attack && player.state != player.block) { player.health -= 5; }
-                    if (enemy.state == enemy.grab && player.state != player.attack) { player.health -= 5; }
-                }
-
-
-                //update enemy
-                switch (enemy.movement) {
-                    case "jump":
-                        enemy.state = enemy.jump;
-                        break;
-                    case "left":
-                        enemy.state = enemy.idle;
-                        enemy.positionX -= 10;
-                        break;
-                    case "right":
-                        enemy.state = enemy.idle;
-                        enemy.positionX += 10;
-                        break;
-                    case "attack":
-                        enemy.state = enemy.attack;
-                        break;
-                    case "block":
-                        enemy.state = enemy.block;
-                        break;
-                    case "grab":
-                        enemy.state = enemy.grab;
-                        break;
-                    default:
-                        enemy.state = enemy.idle;
-                        break;
-                }
-
-                //check if somebody won
-                if (player.health <= 0) {
-                    player.state = player.lose;
-                    enemy.state = enemy.win;
-                }
-                if (enemy.health <= 0) {
-                    player.state = player.win;
-                    enemy.state = enemy.lose;
-                }
-
                 render();
             }
-            setInterval(Update, 250);
+            setInterval(Update, 150);
 
             function render()
             {
